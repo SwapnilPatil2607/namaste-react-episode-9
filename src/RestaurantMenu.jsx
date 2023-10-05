@@ -1,31 +1,25 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import useRestaurantMenuData from "../../namaste-react-episode-9/utils/useRestaurantMenuData";
 
 export const RestaurantMenu = () => {
   const [resInfo, setResInfo] = useState();
   const [menu, setMenu] = useState([]);
   const { id } = useParams();
-  // useParam is a hook provided router library
 
-  const getData = async () => {
-    const data = await fetch(
-      `https://www.swiggy.com/dapi/menu/pl?page-type=REGULAR_MENU&complete-menu=true&lat=19.159014&lng=72.9985686&restaurantId=${id}&catalog_qa=undefined&submitAction=ENTER`
-    );
-    const json = await data.json();
-    setResInfo(json.data.cards[0].card.card.info);
-    setMenu(
-      json.data.cards[2].groupedCard.cardGroupMap.REGULAR.cards[2].card.card
-        .itemCards
-    );
-    console.log(
-      json.data.cards[2].groupedCard.cardGroupMap.REGULAR.cards[2].card.card
-        .itemCards
-    );
-  };
+  // our custom hook
+  const data = useRestaurantMenuData(id);
 
   useEffect(() => {
-    getData();
-  }, []);
+    if (data) {
+      // we dont have to write api calls in this component since it is handled by custom hook
+      setResInfo(data.data.cards[0].card.card.info);
+      setMenu(
+        data.data.cards[2].groupedCard.cardGroupMap.REGULAR.cards[2].card.card
+          .itemCards
+      );
+    }
+  }, [data]);
   return (
     <div>
       <div className="res-info-page">

@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useOnlineStatus } from "../utils/useOnlineStatus";
 
 const Header = () => {
   const [buttonName, setButtonName] = useState("Login");
-
+  const status = useOnlineStatus();
   useEffect(() => {}, []);
 
   // useEffect(()=>{}) called after everytime component is rendered
@@ -17,6 +18,7 @@ const Header = () => {
     <div className="header">
       <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqgqV9sezgYxiiPqaJ3NXXvwDbkzgXpCeBWQ&usqp=CAU" />
       <div>
+        {status ? "you are online" : "you are offline"}
         <ul>
           <li>
             <Link to="/">Home</Link>
@@ -26,6 +28,9 @@ const Header = () => {
           </li>
           <li>
             <Link to="/about">About</Link>
+          </li>
+          <li>
+            <Link to="/small-bundle">Small bundle page</Link>
           </li>
           <li>
             <button
